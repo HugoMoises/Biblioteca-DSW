@@ -22,7 +22,7 @@ class Category(models.Model):
 
 class Livro(models.Model):
     titulo = models.CharField(max_length=200)
-    autor = models.ForeignKey(Autor, on_delete=models.PROTECT, related_name="books")
+    autor = models.ManyToManyField(Autor, related_name="books")
     ano_publicacao = models.IntegerField()
     categories = models.ManyToManyField(Category, blank=True)
     disponivel = models.BooleanField(default=True)
