@@ -1,4 +1,4 @@
-## Relacionamento Autor -> Livro
+## Relacionamento Autor -> Livro com ForeignKey
 No relacionamento ForeignKey entre Livro e Autor deve ser utilizado "PROTECT" no on_delete  para impedir que um autor seja excluído se tiver um livro relacionado a ele. Isso evita que tenham livros cadastrados com o campo de autor nulo.
 
 ### 1. Que dados se perdem quando a migração é revertida? Por quê?
