@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <ul>
+        {% for livro in livros %}
+            <li>
+                {{ livro.titulo }} -
+                {% for autor in livro.autor.all %}
+                    <a href="{% url 'autor' autor.id %}">{{ autor }}</a>
+                {% empty %}
+                    Nenhum autor cadastrado
+                {% endfor %}
+                - {{ livro.ano_publicacao }}
+            </li>
+        {% empty %}
+            <li>Nenhum Livro Cadastrado</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
