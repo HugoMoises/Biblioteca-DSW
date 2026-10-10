@@ -8,7 +8,7 @@
 <body>
     <ul>
         {% for livro in livros %}
-            <li>{{livro.titulo}} - {{livro.autor}} - {{livro.ano_publicacao}}</li>
+            <li>{{livro.titulo}} - <a href="{% url 'autor' livro.autor.id %}">{{livro.autor}}</a> - {{livro.ano_publicacao}}</li>
         {% empty %}
             <li>Nenhum Livro Cadastrado</li>
         {% endfor %}
