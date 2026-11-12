@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Autor</title>
+</head>
+<body>
+    <h1>Criar novo autor</h1>
+    <form action="{% url 'create-autor' %}" method="post">
+    {% csrf_token %}
+    <div>
+        {{ form.name.label_tag }}
+        {{ form.name }}
+        {{ form.name.errors }}
+    </div>
+
+    <div>
+        {{ form.nationality.label_tag }}
+        {{ form.nationality }}
+        {{ form.nationality.errors }}
+    </div>
+
+    <button type="submit">Criar</button>
+
+</form>
+</body>
+</html>

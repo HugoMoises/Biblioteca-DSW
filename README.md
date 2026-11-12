@@ -7,3 +7,6 @@ Ao reverter a migração, os vínculos entre livros e autores podem ser perdidos
 ### 2. Com ManyToMany, o que acontece com um livro quando o seu único autor é apagado? Como garantir que todo livro tenha pelo menos um autor?
 
 O livro continua existindo, mas fica sem autor associado. Para evitar isso, podemos validar se há pelo menos um autor associado ao livro e lançar um ValidationError caso contrário. Essa validação deve ocorrer após salvar os relacionamentos, pois o ManyToManyField é armazenado separadamente do livro.
+
+### Proteção CSRF
+O formulário utiliza {% csrf_token %} para proteger contra ataques CSRF (Cross-Site Request Forgery). Ao remover essa proteção, o Django retorna o erro 403 Forbidden (CSRF verification failed) ao tentar enviar o formulário via POST, impedindo o processamento da requisição.
