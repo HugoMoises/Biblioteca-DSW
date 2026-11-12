@@ -1,27 +1,31 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Livros</title>
 </head>
 <body>
-    
+
+    <h1>Biblioteca</h1>
+
+    <a href="{% url 'livro-novo' %}">Novo livro</a>
+
     <ul>
         {% for livro in livros %}
             <li>
-                {{ livro.titulo }} -
-                {% for autor in livro.autor.all %}
-                    <a href="{% url 'autor' autor.id %}">{{ autor }}</a>
-                {% empty %}
-                    Nenhum autor cadastrado
-                {% endfor %}
+                {{ livro.titulo }} - <a href="{% url 'autor' livro.autor.id %}">{{ livro.autor }}</a>
+
                 - {{ livro.ano_publicacao }}
+
+                <a href="{% url 'livro-editar' livro.id %}">Editar</a>
             </li>
         {% empty %}
-            <li>Nenhum Livro Cadastrado</li>
+            <li>Nenhum livro cadastrado.</li>
         {% endfor %}
     </ul>
+
     <a href="{% url 'create-autor' %}">Novo autor</a>
+
 </body>
 </html>

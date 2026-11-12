@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ titulo }}</title>
+</head>
+<body>
+
+    <h1>{{ titulo }}</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <div>
+            {{ form.titulo.label_tag }}
+            {{ form.titulo }}
+            {{ form.titulo.errors }}
+        </div>
+
+        <div>
+            {{ form.autor.label_tag }}
+            {{ form.autor }}
+            {{ form.autor.errors }}
+        </div>
+
+        <div>
+            {{ form.ano_publicacao.label_tag }}
+            {{ form.ano_publicacao }}
+            {{ form.ano_publicacao.errors }}
+        </div>
+
+        <div>
+            {{ form.disponivel.label_tag }}
+            {{ form.disponivel }}
+            {{ form.disponivel.errors }}
+        </div>
+
+        <div>
+            {{ form.categories.label_tag }}
+            {{ form.categories }}
+            {{ form.categories.errors }}
+        </div>
+
+        <button type="submit">{{ botao }}</button>
+    </form>
+
+    <a href="{% url 'livros' %}">Voltar</a>
+
+</body>
+</html>

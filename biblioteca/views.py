@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Livro, Autor
-from .forms import AutorForm
+from .forms import AutorForm, LivroForm
 
 def list_livros(request):
     livros = Livro.objects.all()
@@ -10,6 +10,32 @@ def list_livros(request):
     }
 
     return render(request, "biblioteca/list_livros.html", context)
+
+def create_edit_livro(request, pk=None):
+    if pk:
+        livro = get_object_or_404(Livro, pk=pk)
+    else:
+        livro = None
+
+    if request.method == "POST":
+        form = LivroForm(request.POST, instance=livro)
+
+        if form.is_valid():
+            livro = form.save()
+            return redirect("autor", id=livro.autor.id)
+
+    else:
+        form = LivroForm(instance=livro)
+
+    context = {
+        "form": form,
+        "titulo": "Editar livro" if livro else "Novo livro",
+        "botao": "Salvar alterações" if livro else "Cadastrar livro"
+    }
+
+    return render(request, "biblioteca/form_livro.html", context)
+    
+
 
 def create_autor(request):
     if request.method == "POST":

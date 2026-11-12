@@ -11,6 +11,8 @@
     <ul>
         {% for livro in livros %}
             <li>{{livro.titulo}}</li>
+            <a href="{% url 'livro-editar' livro.id %}">Editar</a>
+
         {% empty %}
             <li>Este autor não tem nenhum livro cadastrado</li>
         {% endfor %}
