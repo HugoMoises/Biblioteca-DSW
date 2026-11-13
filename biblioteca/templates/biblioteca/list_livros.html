@@ -9,16 +9,19 @@
 
     <h1>Biblioteca</h1>
 
-    <a href="{% url 'livro-novo' %}">Novo livro</a>
+    <a href="{% url 'livro-criar' %}">Novo livro</a>
 
     <ul>
         {% for livro in livros %}
             <li>
-                {{ livro.titulo }} - <a href="{% url 'autor' livro.autor.id %}">{{ livro.autor }}</a>
-
+                {{ livro.titulo }} - 
+                
+                {% for autor in livro.autor.all %}
+                    <a href="{% url 'autor' autor.id %}">{{ autor }}</a>
+                {% endfor %}
                 - {{ livro.ano_publicacao }}
 
-                <a href="{% url 'livro-editar' livro.id %}">Editar</a>
+                <a href="{% url 'livro-editar' livro.id %}?next={{ request.get_full_path|urlencode }}">Editar</a>
             </li>
         {% empty %}
             <li>Nenhum livro cadastrado.</li>

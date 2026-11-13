@@ -10,12 +10,12 @@
     <h2>Livros do autor {{autor.name}}</h2>
     <ul>
         {% for livro in livros %}
-            <li>{{livro.titulo}}</li>
-            <a href="{% url 'livro-editar' livro.id %}">Editar</a>
-
+            <li>{{livro.titulo}} - {{livro.ano_publicacao}}</li>
+            <a href="{% url 'livro-editar' livro.id %}?next={{ request.get_full_path|urlencode }}">Editar</a>
         {% empty %}
             <li>Este autor não tem nenhum livro cadastrado</li>
         {% endfor %}
     </ul>
+    <a href="{% url 'livros' %}">Ver livros</a>
 </body>
 </html>

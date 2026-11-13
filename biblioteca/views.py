@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Livro, Autor
 from .forms import AutorForm, LivroForm
+from django.utils.http import url_has_allowed_host_and_scheme
+
 
 def list_livros(request):
     livros = Livro.objects.all()
@@ -22,7 +24,16 @@ def create_edit_livro(request, pk=None):
 
         if form.is_valid():
             livro = form.save()
-            return redirect("autor", id=livro.autor.id)
+
+            next_url = request.POST.get("next")
+
+            if next_url and url_has_allowed_host_and_scheme(
+                next_url,
+                allowed_hosts={request.get_host()}
+            ):
+                return redirect(next_url)
+
+            return redirect("livros")
 
     else:
         form = LivroForm(instance=livro)
@@ -30,7 +41,8 @@ def create_edit_livro(request, pk=None):
     context = {
         "form": form,
         "titulo": "Editar livro" if livro else "Novo livro",
-        "botao": "Salvar alterações" if livro else "Cadastrar livro"
+        "botao": "Salvar alterações" if livro else "Cadastrar livro",
+        "next": request.GET.get("next", "")
     }
 
     return render(request, "biblioteca/form_livro.html", context)
