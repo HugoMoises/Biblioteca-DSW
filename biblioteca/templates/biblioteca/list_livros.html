@@ -35,6 +35,7 @@
                 <br>
 
                 <a href="{% url 'livro-editar' livro.id %}?next={{ request.get_full_path|urlencode }}">Editar</a>
+                <a href="{% url 'livro-excluir' livro.id %}?next={{ request.get_full_path|urlencode }}">Excluir</a>
             </li>
         {% empty %}
             <li>Nenhum livro cadastrado.</li>
@@ -42,6 +43,7 @@
     </ul>
 
     <a href="{% url 'create-autor' %}">Novo autor</a>
+    <a href="{% url 'sobre' %}">Sobre a biblioteca</a>
 
 </body>
 </html>

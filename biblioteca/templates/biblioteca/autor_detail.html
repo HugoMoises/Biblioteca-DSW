@@ -12,6 +12,7 @@
         {% for livro in livros %}
             <li>{{livro.titulo}} - {{livro.ano_publicacao}}</li>
             <a href="{% url 'livro-editar' livro.id %}?next={{ request.get_full_path|urlencode }}">Editar</a>
+            <a href="{% url 'livro-excluir' livro.id %}?next={{ request.get_full_path|urlencode }}">Excluir</a>
         {% empty %}
             <li>Este autor não tem nenhum livro cadastrado</li>
         {% endfor %}

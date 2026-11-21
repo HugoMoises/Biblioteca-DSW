@@ -1,52 +1,76 @@
-from django.shortcuts import render, get_object_or_404, redirect
+
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView 
+from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.http import url_has_allowed_host_and_scheme
 from .models import Livro, Autor
 from .forms import AutorForm, LivroForm
-from django.utils.http import url_has_allowed_host_and_scheme
 
 
-def list_livros(request):
-    livros = Livro.objects.all()
+class LivroListView(ListView):
+    model = Livro
+    template_name = "biblioteca/list_livros.html"
+    context_object_name = "livros"
+    queryset = Livro.objects.order_by("titulo")
 
-    context = {
-        "livros": livros
-    }
 
-    return render(request, "biblioteca/list_livros.html", context)
+class LivroFormMixin:
+    success_url = reverse_lazy("livros")
 
-def create_edit_livro(request, pk=None):
-    if pk:
-        livro = get_object_or_404(Livro, pk=pk)
-    else:
-        livro = None
+    def get_success_url(self):
+        next_url = self.request.POST.get("next")
 
-    if request.method == "POST":
-        form = LivroForm(request.POST, request.FILES, instance=livro)
+        if next_url and url_has_allowed_host_and_scheme(
+            next_url,
+            allowed_hosts={self.request.get_host()}
+        ):
+            return next_url
 
-        if form.is_valid():
-            livro = form.save()
+        return super().get_success_url()
 
-            next_url = request.POST.get("next")
 
-            if next_url and url_has_allowed_host_and_scheme(
-                next_url,
-                allowed_hosts={request.get_host()}
-            ):
-                return redirect(next_url)
+class LivroCreateView(LivroFormMixin, CreateView):
+    model = Livro
+    form_class = LivroForm
+    template_name = "biblioteca/form_livro.html"
 
-            return redirect("livros")
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["titulo"] = "Novo livro"
+        context["botao"] = "Cadastrar livro"
+        context["next"] = self.request.GET.get("next", "")
+        return context
 
-    else:
-        form = LivroForm(instance=livro)
 
-    context = {
-        "form": form,
-        "titulo": "Editar livro" if livro else "Novo livro",
-        "botao": "Salvar alterações" if livro else "Cadastrar livro",
-        "next": request.GET.get("next", "")
-    }
+class LivroUpdateView(LivroFormMixin, UpdateView):
+    model = Livro
+    form_class = LivroForm
+    template_name = "biblioteca/form_livro.html"
 
-    return render(request, "biblioteca/form_livro.html", context)
-    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["titulo"] = "Editar livro"
+        context["botao"] = "Salvar alterações"
+        context["next"] = self.request.GET.get("next", "")
+        return context
+
+
+class LivroDeleteView(DeleteView):
+    model = Livro
+    template_name = "biblioteca/livro_confirm_delete.html"
+    success_url = reverse_lazy("livros")
+
+
+class SobreView(TemplateView):
+    template_name = "biblioteca/sobre.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total_livros"] = Livro.objects.count()
+        context["livros_disponiveis"] = Livro.objects.filter(
+            disponivel=True
+        ).count()
+        return context
 
 
 def create_autor(request):
@@ -57,21 +81,17 @@ def create_autor(request):
             return redirect("autor", id=autor.id)
     else:
         form = AutorForm()
-    
-    context = {
+
+    return render(request, "biblioteca/create_autor.html", {
         "form": form
-    }
-    return render(request, "biblioteca/create_autor.html", context)
+    })
 
 
 def autor_detail(request, id):
     autor = get_object_or_404(Autor, id=id)
-
     livros = autor.books.all()
 
-    context = {
+    return render(request, "biblioteca/autor_detail.html", {
         "autor": autor,
         "livros": livros
-    }
-
-    return render(request, "biblioteca/autor_detail.html", context)
+    })
