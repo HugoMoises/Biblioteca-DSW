@@ -21,7 +21,10 @@ class LivroForm(forms.ModelForm):
             "autor",
             "ano_publicacao",
             "disponivel",
-            "categories"
+            "categories",
+            "num_paginas",
+            "isbn",
+            "capa"
         ]
 
         labels = {
@@ -29,7 +32,10 @@ class LivroForm(forms.ModelForm):
             "autor": "Autor(es)",
             "ano_publicacao": "Ano de publicação",
             "disponivel": "Disponível",
-            "categories": "Categorias"
+            "categories": "Categorias",
+            "num_paginas": "Número de páginas",
+            "isbn": "ISBN",
+            "capa": "Capa"
         }
 
 

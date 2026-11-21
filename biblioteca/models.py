@@ -1,6 +1,7 @@
 from django.db import models   
-from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator, FileExtensionValidator, MinValueValidator, MaxValueValidator
 from datetime import date 
+from .validators import validar_tamanho_arquivo
 
 class Autor(models.Model):
     name = models.CharField(max_length=120, validators=[MinLengthValidator(3)])
@@ -26,10 +27,11 @@ class Livro(models.Model):
     titulo = models.CharField(max_length=200)
     autor = models.ManyToManyField(Autor, related_name="books")
     categories = models.ManyToManyField(Category, blank=True)
-    ano_publicacao = models.PositiveIntegerField(validators=[MinLengthValidator(1450), MaxLengthValidator(date.today().year)])
+    ano_publicacao = models.PositiveIntegerField(validators=[MinValueValidator(1450), MaxValueValidator(date.today().year)])
     disponivel = models.BooleanField(default=True)
-    num_paginas = models.PositiveIntegerField(null=True, blank=True, validators=[MinLengthValidator(1), MaxLengthValidator(5000)])
+    num_paginas = models.PositiveIntegerField(null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5000)])
     isbn = models.CharField(max_length=13, null=True, blank=True, validators=[MinLengthValidator(13), MaxLengthValidator(13)])
+    capa = models.ImageField(upload_to="capas/", null=True, blank=True, validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']), validar_tamanho_arquivo])
 
     def __str__(self):
         return self.titulo

@@ -14,12 +14,25 @@
     <ul>
         {% for livro in livros %}
             <li>
-                {{ livro.titulo }} - 
-                
+                {{ livro.titulo }} -
+
                 {% for autor in livro.autor.all %}
                     <a href="{% url 'autor' autor.id %}">{{ autor }}</a>
                 {% endfor %}
-                - {{ livro.ano_publicacao }}
+
+                - Ano: {{ livro.ano_publicacao }}
+                - Páginas: {{ livro.num_paginas }}
+                - ISBN: {{ livro.isbn }}
+
+                <br>
+
+                {% if livro.capa %}
+                    <img src="{{ livro.capa.url }}" alt="Capa de {{ livro.titulo }}" width="100">
+                {% else %}
+                    <p>Sem capa cadastrada.</p>
+                {% endif %}
+
+                <br>
 
                 <a href="{% url 'livro-editar' livro.id %}?next={{ request.get_full_path|urlencode }}">Editar</a>
             </li>

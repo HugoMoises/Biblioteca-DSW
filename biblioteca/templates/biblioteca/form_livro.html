@@ -9,7 +9,7 @@
 
     <h1>{{ titulo }}</h1>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
 
@@ -43,6 +43,23 @@
             {{ form.categories.label_tag }}
             {{ form.categories }}
             {{ form.categories.errors }}
+        </div>
+        <div>
+            {{ form.num_paginas.label_tag }}
+            {{ form.num_paginas }}
+            {{ form.num_paginas.errors }}
+        </div>
+
+        <div>
+            {{ form.isbn.label_tag }}
+            {{ form.isbn }}
+            {{ form.isbn.errors }}
+        </div>
+
+        <div>
+            {{ form.capa.label_tag }}
+            {{ form.capa }}
+            {{ form.capa.errors }}
         </div>
 
         <button type="submit">{{ botao }}</button>
